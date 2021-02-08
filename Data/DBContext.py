@@ -20,7 +20,7 @@ class DBContext:
 
     def update_article(self, article):
         with self.connection:
-            return self.cursor.execute("UPDATE `Articles` SET `link` = ?, photo_link = ?, text = ? WHERE `name` = ?",
+            return self.cursor.execute("UPDATE `Articles` SET `link` = ?, `photo_link` = ?, `text` = ? WHERE `name` = ?",
                                        (str(article.link), str(article.photo_link), str(article.text), article.name))
 
     def close(self):
