@@ -2,7 +2,7 @@ import requests
 import io
 from bs4 import BeautifulSoup
 import csv
-from project.Parser.ArticleModel import ArticleModel
+from project.WoWWiki_BOT.Parser.ArticleModel import ArticleModel
 
 class WoWWikiParser:
 
@@ -14,11 +14,16 @@ class WoWWikiParser:
 
         self.HTML = requests.get(parseURL, headers=self.HEADERS, params='').text
         self.soup = BeautifulSoup(self.HTML, 'html.parser')
-        self.parseCategory = parseURL[50:]
+        self.parseCategory = parseURL[49:]
 
     def SaveToDatabase(self, members, DBContext):
         for member in members:
-            DBContext.add_article(member)
+            is_contain = DBContext.find_article(member.name)
+
+            if(is_contain):
+                DBContext.update_article(member)
+            else:
+                DBContext.add_article(member)
 
 
     #общая функция парсинга. сначала берет ссылки, потом по ним находит инфу/картинку и делает members - как завершенный сборник данных
