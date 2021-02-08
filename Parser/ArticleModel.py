@@ -1,5 +1,4 @@
 class ArticleModel:
-    
     def __init__(self, name, link, photo_link, text, parseCategory):
         self.name = name
         self.link = link
