@@ -6,7 +6,7 @@
 <b> WOW Fandom Wiki BOT</b> 
 </div></a>
 
-This is a telegram bot that helps users to access information about World of Warcraft in a fast way from https://wowwiki-archive.fandom.com
+This is a telegram bot that helps users to access information about World of Warcraft in a fast way from
 <a href="https://wowwiki-archive.fandom.com"><b> WoW Wiki Fandom</b></a>
 
 Now bot is offline. 
