@@ -34,7 +34,7 @@ Now bot is offline.
 7. Run python *Bot.py* file
 
 ## Comments
-1. There are all logs and parsing processes in *parsing.log* file.
+1. There are all logs about parsing processes in *parsing.log* file.
 2. Now database is filled with over 6000 records using 47 parcer links. You can increase records adding new parcers that is based on another parcer links. Check *Parser.py* docstrings for more information about parcer links format.
 
 ## Bot commands
