@@ -19,8 +19,7 @@ logging.basicConfig(level=logging.INFO)
 
 """connecting to the database"""
 db = DBContext(
-    "E:\\WSIZ\\wsiz 3 rok\\Python (Smok)\\Project\\poligon\\"
-    "test_bot\\venv\\project\\WoWWiki_BOT\\Data\\database.db"
+    #here is a sting that contain path to your database
 )
 
 
