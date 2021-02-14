@@ -1,5 +1,7 @@
 import sqlite3
 
+from project.WoWWiki_BOT.Parser.ArticleModel import ArticleModel
+
 
 class DBContext:
     """
@@ -42,10 +44,19 @@ class DBContext:
         """find article in the database by the name"""
         with self.connection:
             result = self.cursor.execute(
-                "SELECT * FROM `Articles` "
-                "WHERE LOWER(`name`) = ?", (article_name,)
-            ).fetchall()
-            return result
+                "SELECT * FROM `Articles` " "WHERE LOWER(`name`) = ?",
+                (article_name,)
+            ).fetchone()
+
+            article = ArticleModel(
+                name=result[1],
+                link=result[2],
+                photo_link=result[3],
+                text=result[4],
+                parseCategory=result[5],
+            )
+
+            return article
 
     def add_article(self, article):
         """add new article to the database"""

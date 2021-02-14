@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from PIL import Image
 from project.WoWWiki_BOT.Bot.parsing import parcing
 from project.WoWWiki_BOT.Data.DBContext import DBContext
+from project.WoWWiki_BOT.Parser.ArticleModel import ArticleModel
 
 import config
 
@@ -34,9 +35,8 @@ async def welcome(message: types.Message):
         "Hello, {0}! I'm WoW Wiki Bot. Find what do "
         "you want from World of Warcraft fandom!"
         "Just type a name of hero/race/stuff or "
-        "something else and I'll try to find it!".format(
-            message.from_user.first_name
-        )
+        "something else and I'll "
+        "try to find it!".format(message.from_user.first_name)
     )
 
 
@@ -54,58 +54,46 @@ async def find(message: types.Message):
     article = db.find_article(message.text.lower())
 
     if article:
-        if article[0][3] == "NONE_IMAGE_HERE":
+        if article.photo_link == "NONE_IMAGE_HERE":
 
             buffer = io.BytesIO()
             not_found = Image.open("not-found.jpg")
             not_found.save(buffer, format="JPEG", quality=75)
             not_found = buffer.getbuffer()
 
-            if len(article[0][4]) > 870:
-                await bot.send_photo(message.from_user.id, not_found)
-                await bot.send_message(
-                    chat_id=message.from_user.id,
-                    text=message.text.upper()
-                    + "\n\n"
-                    + article[0][4]
-                    + "\n\nHere is a link to full article:\n"
-                    + article[0][2],
-                )
-            else:
-                await bot.send_photo(
-                    message.from_user.id,
-                    not_found,
-                    caption=message.text.upper()
-                    + "\n\n"
-                    + article[0][4]
-                    + "\n\nHere is a link to full article:\n"
-                    + article[0][2],
-                )
+            await send_article(message, article, not_found)
         else:
-            if len(article[0][4]) > 870:
-                await bot.send_photo(message.from_user.id, article[0][3])
-                await bot.send_message(
-                    chat_id=message.from_user.id,
-                    text=message.text.upper()
-                    + "\n\n"
-                    + article[0][4]
-                    + "\n\nHere is a link to full article:\n"
-                    + article[0][2],
-                )
-            else:
-                await bot.send_photo(
-                    message.from_user.id,
-                    article[0][3],
-                    caption=message.text.upper()
-                    + "\n\n"
-                    + article[0][4]
-                    + "\n\nHere is a link to full article:\n"
-                    + article[0][2],
-                )
+            await send_article(message, article, article.photo_link)
     else:
         await message.answer(
             "Sorry, I cannot find information about "
             "this :(\nCheck if you typed correctly."
+        )
+
+
+async def send_article(message: types.Message,
+                       article: ArticleModel,
+                       article_photo):
+    """function to send article by the bot"""
+    if len(article.text) > 870:
+        await bot.send_photo(message.from_user.id, article_photo)
+        await bot.send_message(
+            chat_id=message.from_user.id,
+            text=message.text.upper()
+            + "\n\n"
+            + article.text
+            + "\n\nHere is a link to full article:\n"
+            + article.link,
+        )
+    else:
+        await bot.send_photo(
+            message.from_user.id,
+            article_photo,
+            caption=message.text.upper()
+            + "\n\n"
+            + article.text
+            + "\n\nHere is a link to full article:\n"
+            + article.link,
         )
 
 
